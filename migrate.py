@@ -37,15 +37,14 @@ def main():
         n = 0
         p = 0
         for row in cur:
-            if n<1000:
-                data_point = {"measurement": "temperature",
-                              "tags" : {"sensor_place":row[1]},
-                              "time" : "%sZ"%row[0],
-                              "fields" : {"value" : row[2]}
-                             }
-                data_list.append(data_point)
-                n=n+1
-            else:
+            data_point = {"measurement": "temperature",
+                          "tags" : {"sensor_place":row[1]},
+                          "time" : "%sZ"%row[0],
+                          "fields" : {"value" : row[2]}
+                         }
+            data_list.append(data_point)
+            n=n+1
+            if n>=1000:
                 n = 0
                 logging.info("Write a part of data points %s"%p)
                 influx_con.write_points(data_list,time_precision='s')
